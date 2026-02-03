@@ -335,15 +335,14 @@ class MapEditor:
                     px = x + dx - self.brush_size // 2
                     py = y + dy - self.brush_size // 2
                     if 0 <= px < GRID_WIDTH and 0 <= py < GRID_HEIGHT:
-                        # Special handling for spawn points (only one of each type allowed)
-                        if tile_type in [TileType.PLAYER_SPAWN.value, 
-                                       TileType.ENEMY_SPAWN.value,
-                                       TileType.POWERUP_SPAWN.value]:
-                            # Remove existing spawn of same type
+                        # Special handling for spawn points
+                        if tile_type == TileType.PLAYER_SPAWN.value:
+                            # Only one player spawn allowed - remove existing player spawn
                             for cy in range(GRID_HEIGHT):
                                 for cx in range(GRID_WIDTH):
-                                    if self.map_data[cy][cx] == tile_type:
+                                    if self.map_data[cy][cx] == TileType.PLAYER_SPAWN.value:
                                         self.map_data[cy][cx] = TileType.GRASS.value
+                        # Multiple enemy and power-up spawns are allowed
                         
                         self.map_data[py][px] = tile_type
                         self.dirty = True

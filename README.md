@@ -17,6 +17,10 @@ A classic Tank Battle game with an integrated map editor, built in Python using 
 - **Save/Load Maps**: Save custom maps and load them in the game
 - **Multiple Layers**: Edit terrain, objects, and spawn points separately
 - **Intuitive UI**: Simple mouse-based interface with tool palette
+- **Smart Spawn Management**: 
+  - Single player spawn (automatically replaces previous)
+  - Multiple enemy spawns (place as many as you want!)
+  - Multiple power-up spawns
 
 ## 🛠️ Installation
 
