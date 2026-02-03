@@ -19,7 +19,26 @@ case $choice in
     1)
         echo "Starting Tank Battle Game..."
         echo "Controls: WASD/Arrows to move, Space to shoot, P to pause, ESC to quit"
-        echo "Note: Running in headless mode (no audio available)"
+        
+        # Check for headless environment
+        if [ -z "$DISPLAY" ] && [ "$(uname)" != "Darwin" ]; then
+            echo ""
+            echo "⚠️  WARNING: DETECTED HEADLESS ENVIRONMENT (NO GUI)"
+            echo "⚠️  Keyboard input will NOT work in headless mode"
+            echo "⚠️  You will need to press Ctrl+C to exit"
+            echo "⚠️  For the full game experience, run on a machine with a display"
+            echo ""
+            read -p "Continue anyway? (y/n): " -n 1 -r
+            echo ""
+            if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+                echo "Exiting..."
+                exit 0
+            fi
+            echo "Note: Running in headless mode (no audio, keyboard input disabled)"
+        else
+            echo "Note: Audio may be disabled in some environments"
+        fi
+        
         # Try uv run first, fall back to regular python
         if command -v uv &> /dev/null && [ -f "pyproject.toml" ]; then
             SDL_AUDIODRIVER=dummy uv run python game.py
@@ -31,6 +50,24 @@ case $choice in
         echo "Starting Map Editor..."
         echo "Controls: Left-click to place tiles, Right-click to remove"
         echo "Number keys 0-5: Select terrain, P/E/U: Select spawn points"
+        
+        # Check for headless environment
+        if [ -z "$DISPLAY" ] && [ "$(uname)" != "Darwin" ]; then
+            echo ""
+            echo "⚠️  WARNING: DETECTED HEADLESS ENVIRONMENT (NO GUI)"
+            echo "⚠️  Mouse and keyboard input will NOT work in headless mode"
+            echo "⚠️  You will need to press Ctrl+C to exit"
+            echo "⚠️  For map editing, run on a machine with a display"
+            echo ""
+            read -p "Continue anyway? (y/n): " -n 1 -r
+            echo ""
+            if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+                echo "Exiting..."
+                exit 0
+            fi
+            echo "Note: Running in headless mode (input disabled)"
+        fi
+        
         # Try uv run first, fall back to regular python
         if command -v uv &> /dev/null && [ -f "pyproject.toml" ]; then
             SDL_AUDIODRIVER=dummy uv run python map_editor.py

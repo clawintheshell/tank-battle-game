@@ -87,31 +87,60 @@ uv run pytest
 2. Run `uv sync` to get the exact same environment
 3. The `uv.lock` file ensures everyone uses the same dependency versions
 
-## 🖥️ Headless/Server Environments
+## 🖥️ Headless/Server Environments (IMPORTANT!)
 
-If you're running on a server or headless environment (no audio hardware):
+### ⚠️ CRITICAL WARNING FOR HEADLESS/SERVER USERS:
+This is a **graphical game** that requires a **display** for proper operation. In headless environments:
 
-### Option 1: Use SDL_AUDIODRIVER environment variable
+**What WON'T work:**
+- ❌ Keyboard input (WASD, Space, ESC keys)
+- ❌ Mouse input (for map editor)  
+- ❌ You must use **Ctrl+C** to exit the game
+- ❌ Game runs but is **not playable** without a display
+
+**What WILL work:**
+- ✅ Game starts and shows initialization messages
+- ✅ Tests can verify installation (`python test_game.py`)
+- ✅ Demo shows features (`python demo.py`)
+
+### Options for Headless Testing:
+
+#### Option 1: Test installation only
 ```bash
-# Suppress audio warnings and run without audio
+# Verify everything works
+python test_game.py
+
+# See features without running game
+python demo.py
+```
+
+#### Option 2: Use xvfb for virtual display (allows input)
+```bash
+# Install virtual display server
+sudo apt install xvfb
+
+# Run with virtual display
+xvfb-run -a python game.py
+```
+
+#### Option 3: Suppress audio warnings (game starts but no input)
+```bash
 SDL_AUDIODRIVER=dummy python game.py
-
-# Or with uv
-SDL_AUDIODRIVER=dummy uv run python game.py
+# Or use the run script:
+./run.sh
 ```
 
-### Option 2: Use the provided run script
-```bash
-./run.sh  # Automatically handles headless environments
-```
+### 🎮 FOR ACTUAL GAMEPLAY:
+**You MUST run this on a machine with:**
+1. A graphical display (Windows, Mac, Linux desktop)
+2. Window manager for keyboard/mouse input
+3. (Optional) Audio hardware for sound effects
 
-### Option 3: Install dummy audio driver (Linux)
+**Recommended:** Clone and run on your local computer:
 ```bash
-# Install dummy ALSA driver
-sudo apt-get install alsa-utils
-sudo modprobe snd-dummy
-
-# Now the game will detect audio hardware (dummy)
+git clone https://github.com/clawintheshell/tank-battle-game
+cd tank-battle-game
+uv sync
 python game.py
 ```
 
