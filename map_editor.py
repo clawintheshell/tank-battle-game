@@ -346,6 +346,11 @@ class MapEditor:
                         
                         self.map_data[py][px] = tile_type
                         self.dirty = True
+                        
+                        # Debug: print when placing enemy spawns
+                        if tile_type == TileType.ENEMY_SPAWN.value:
+                            enemy_count = sum(1 for row in self.map_data for cell in row if cell == TileType.ENEMY_SPAWN.value)
+                            print(f"🔧 DEBUG: Placed enemy spawn at ({px},{py}). Total enemies: {enemy_count}")
     
     def remove_tile(self, x, y):
         """Remove tile (set to grass) at the specified grid coordinates."""
