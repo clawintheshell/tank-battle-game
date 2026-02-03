@@ -1,5 +1,5 @@
 #!/bin/bash
-# Tank Battle Game - Run Script
+# Tank Battle Game - Run Script with uv support
 
 echo "========================================"
 echo "   Tank Battle Game with Map Editor    "
@@ -8,7 +8,7 @@ echo ""
 echo "Choose an option:"
 echo "1. Run Game"
 echo "2. Run Map Editor"
-echo "3. Install Dependencies"
+echo "3. Install Dependencies (using uv)"
 echo "4. Test Game"
 echo "5. Exit"
 echo ""
@@ -19,27 +19,56 @@ case $choice in
     1)
         echo "Starting Tank Battle Game..."
         echo "Controls: WASD/Arrows to move, Space to shoot, P to pause, ESC to quit"
-        python3 game.py
+        # Try uv run first, fall back to regular python
+        if command -v uv &> /dev/null && [ -f "pyproject.toml" ]; then
+            uv run python game.py
+        else
+            python3 game.py
+        fi
         ;;
     2)
         echo "Starting Map Editor..."
         echo "Controls: Left-click to place tiles, Right-click to remove"
         echo "Number keys 0-5: Select terrain, P/E/U: Select spawn points"
-        python3 map_editor.py
+        # Try uv run first, fall back to regular python
+        if command -v uv &> /dev/null && [ -f "pyproject.toml" ]; then
+            uv run python map_editor.py
+        else
+            python3 map_editor.py
+        fi
         ;;
     3)
         echo "Installing dependencies..."
-        pip install pygame
-        if [ $? -eq 0 ]; then
-            echo "Dependencies installed successfully!"
+        # Check if uv is available
+        if command -v uv &> /dev/null; then
+            echo "Using uv for dependency management..."
+            uv sync
+            if [ $? -eq 0 ]; then
+                echo "✅ Dependencies installed successfully with uv!"
+                echo "Virtual environment created at: .venv/"
+            else
+                echo "❌ Failed to install dependencies with uv."
+            fi
         else
-            echo "Failed to install dependencies. Trying alternative..."
-            sudo apt-get install python3-pygame
+            echo "uv not found. Installing with pip..."
+            echo "Note: For best results, install uv: curl -LsSf https://astral.sh/uv/install.sh | sh"
+            pip install pygame numpy
+            if [ $? -eq 0 ]; then
+                echo "Dependencies installed successfully with pip!"
+            else
+                echo "Failed to install dependencies. Trying alternative..."
+                sudo apt-get install python3-pygame python3-numpy
+            fi
         fi
         ;;
     4)
         echo "Running game test..."
-        python3 test_game.py
+        # Try uv run first, fall back to regular python
+        if command -v uv &> /dev/null && [ -f "pyproject.toml" ]; then
+            uv run python test_game.py
+        else
+            python3 test_game.py
+        fi
         ;;
     5)
         echo "Exiting..."

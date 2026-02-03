@@ -20,14 +20,69 @@ A classic Tank Battle game with an integrated map editor, built in Python using 
 
 ## 🛠️ Installation
 
-### Prerequisites
-- Python 3.8 or higher
-- Pygame 2.5 or higher
+This project uses [`uv`](https://github.com/astral-sh/uv) for fast, reliable dependency management.
 
-### Install Dependencies
+### Prerequisites
+- **Python 3.12 or higher** (automatically installed by `uv`)
+- **`uv`** - Install with: `curl -LsSf https://astral.sh/uv/install.sh | sh`
+
+### Quick Start with `uv`
 ```bash
-pip install pygame
+# Clone the repository
+git clone https://github.com/clawintheshell/tank-battle-game
+cd tank-battle-game
+
+# Install dependencies and create virtual environment
+uv sync
+
+# Run the game
+python game.py
+
+# Or run the map editor
+python map_editor.py
 ```
+
+### Manual Installation (without `uv`)
+```bash
+pip install pygame numpy
+```
+
+## 🔧 Development with `uv`
+
+This project is configured with `uv` for reproducible development environments.
+
+### Project Structure for `uv`
+```
+tank-battle-game/
+├── pyproject.toml    # Project metadata and dependencies
+├── uv.lock           # Locked dependency versions (crucial!)
+├── .python-version   # Python version specification
+├── .gitignore        # Excludes .venv/, .uv/, __pycache__/
+└── .venv/            # Virtual environment (created by `uv sync`)
+```
+
+### Key `uv` Commands
+```bash
+# Install dependencies and create virtual environment
+uv sync
+
+# Update dependencies
+uv sync --upgrade
+
+# Add a new dependency
+uv add package-name
+
+# Run the game from the virtual environment
+uv run python game.py
+
+# Run tests
+uv run pytest
+```
+
+### For Contributors
+1. Clone the repository
+2. Run `uv sync` to get the exact same environment
+3. The `uv.lock` file ensures everyone uses the same dependency versions
 
 Or on Ubuntu/Debian:
 ```bash
