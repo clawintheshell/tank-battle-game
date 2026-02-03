@@ -13,7 +13,13 @@ import json
 
 # Initialize pygame
 pygame.init()
-pygame.mixer.init()
+try:
+    pygame.mixer.init()
+    audio_available = True
+except pygame.error as e:
+    print(f"⚠️  Audio initialization failed: {e}")
+    print("⚠️  Game will run without sound effects")
+    audio_available = False
 
 # Constants
 SCREEN_WIDTH = 800

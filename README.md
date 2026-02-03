@@ -35,11 +35,14 @@ cd tank-battle-game
 # Install dependencies and create virtual environment
 uv sync
 
-# Run the game
-python game.py
+# Run the game (headless/server environments may need SDL_AUDIODRIVER=dummy)
+SDL_AUDIODRIVER=dummy python game.py
 
 # Or run the map editor
-python map_editor.py
+SDL_AUDIODRIVER=dummy python map_editor.py
+
+# Or use the interactive run script
+./run.sh
 ```
 
 ### Manual Installation (without `uv`)
@@ -83,6 +86,36 @@ uv run pytest
 1. Clone the repository
 2. Run `uv sync` to get the exact same environment
 3. The `uv.lock` file ensures everyone uses the same dependency versions
+
+## 🖥️ Headless/Server Environments
+
+If you're running on a server or headless environment (no audio hardware):
+
+### Option 1: Use SDL_AUDIODRIVER environment variable
+```bash
+# Suppress audio warnings and run without audio
+SDL_AUDIODRIVER=dummy python game.py
+
+# Or with uv
+SDL_AUDIODRIVER=dummy uv run python game.py
+```
+
+### Option 2: Use the provided run script
+```bash
+./run.sh  # Automatically handles headless environments
+```
+
+### Option 3: Install dummy audio driver (Linux)
+```bash
+# Install dummy ALSA driver
+sudo apt-get install alsa-utils
+sudo modprobe snd-dummy
+
+# Now the game will detect audio hardware (dummy)
+python game.py
+```
+
+The game is designed to handle missing audio gracefully and will run without sound effects if audio initialization fails.
 
 Or on Ubuntu/Debian:
 ```bash

@@ -19,11 +19,12 @@ case $choice in
     1)
         echo "Starting Tank Battle Game..."
         echo "Controls: WASD/Arrows to move, Space to shoot, P to pause, ESC to quit"
+        echo "Note: Running in headless mode (no audio available)"
         # Try uv run first, fall back to regular python
         if command -v uv &> /dev/null && [ -f "pyproject.toml" ]; then
-            uv run python game.py
+            SDL_AUDIODRIVER=dummy uv run python game.py
         else
-            python3 game.py
+            SDL_AUDIODRIVER=dummy python3 game.py
         fi
         ;;
     2)
@@ -32,9 +33,9 @@ case $choice in
         echo "Number keys 0-5: Select terrain, P/E/U: Select spawn points"
         # Try uv run first, fall back to regular python
         if command -v uv &> /dev/null && [ -f "pyproject.toml" ]; then
-            uv run python map_editor.py
+            SDL_AUDIODRIVER=dummy uv run python map_editor.py
         else
-            python3 map_editor.py
+            SDL_AUDIODRIVER=dummy python3 map_editor.py
         fi
         ;;
     3)
